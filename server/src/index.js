@@ -37,6 +37,9 @@ io.on('connection', (socket) => {
         socket.broadcast.emit("receive-message", data)
     })
 
+    socket.broadcast.emit('welcome', 'welcome to server')
+
+
     socket.on('disconnect', ()=>{
         console.log("user Disconnected", socket.id)
     })

@@ -49,9 +49,26 @@ export const Chat = () => {
     })
     socket.on("receive-message", (data: any) => {
       if (data.id == userId) {
-        console.log("-------------", data)
+        //console.log("-------------", data)
         setMessage((message) => [...message, { message: data.text, position: 'left' }])
       }
+    })
+    socket.on('welcome',(data)=>{
+      if (authentication) {
+        axios.get(`http://localhost:3001/api/v1/all-user`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((res: any) => {
+            dispatch(allAllUsers(res.data.allUser))
+          })
+          .catch((err: any) => {
+            console.log(err)
+          })
+      }
+      console.log(data)
     })
     return () => {
       socket.disconnect()
@@ -73,7 +90,6 @@ export const Chat = () => {
           console.log(err)
         })
     }
-
   }, [])
 
   return (<>{authentication && <div>
